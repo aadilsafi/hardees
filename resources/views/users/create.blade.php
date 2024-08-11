@@ -28,6 +28,9 @@
                 </div>
                 <div class="mb-3">
                     <label for="regions" class="form-label">Regions</label>
+                    <label for="">
+                        (cntrl-click to select multiple cntrl-a to select all)
+                    </label>
                     <select name="regions[]" id="regions" class="form-control" multiple>
                         @foreach($regions as $region)
                         <option value="{{$region}}">{{$region}}</option>
