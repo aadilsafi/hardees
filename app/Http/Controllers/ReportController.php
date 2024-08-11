@@ -32,8 +32,11 @@ class ReportController extends Controller
             ->when($request->end_date, function ($query, $end_date) {
                 return $query->where('ScheduleDate', '<=', $end_date);
             })
+            ->join('tblstores', 'tblscheduleapproval.UnitNo', '=', 'tblstores.StoreNumber')
+            ->orderBy('tblstores.region', 'asc') // Add ordering by region here to affect the main query.
+            ->select('tblscheduleapproval.*', 'tblstores.region as store_region') // Optionally select the region if needed for display or further logic.
             ->get();
-
+        $reports = $reports->sortBy('store_region');
         return view('reports', compact('reports', 'all_regions'));
     }
 
@@ -49,9 +52,7 @@ class ReportController extends Controller
             ->select('tblscheduleapproval.*', 'tblstores.Region as store_region', 'tblstores.StoreNumber as store_number')
             ->get();
 
-        $reports = $reports->sortBy('store_region')
-            ->sortBy('store_number')
-            ->sortBy('ScheduleDate');
+        $reports = $reports->sortBy('store_region');
         return view('pending-reports', compact('reports'));
     }
     public function reportStatusToggle($id)
