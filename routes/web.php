@@ -7,6 +7,9 @@ use App\Http\Controllers\UserController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+Route::get('test', function () {
+    dd('here');
+});
 Auth::routes([
     'register' => false, // Registration Routes...
     'reset' => false, // Password Reset Routes...
