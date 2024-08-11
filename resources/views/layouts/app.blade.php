@@ -45,7 +45,8 @@
                 </div>
             </div> --}}
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
+                    <img src="{{ asset('Hardees_logo.svg') }}" alt="Logo" style="height: 40px; margin-right: 10px;">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
