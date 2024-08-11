@@ -11,10 +11,19 @@ class ReportController extends Controller
     public function reports(Request $request)
     {
         $regions = explode(',', auth()->user()->regions ?? []);
-        $all_regions = Store::distinct()
-            ->pluck('Region')
-            ->sort()
-            ->values();
+        $auth_user = auth()->user();
+        if ($auth_user->role === 'super') {
+            $all_regions = Store::distinct()
+                ->pluck('Region')
+                ->sort()
+                ->values();
+        } else {
+            $all_regions = Store::distinct()
+                ->whereIn('Region', $regions)
+                ->pluck('Region')
+                ->sort()
+                ->values();
+        }
 
         $reports = [];
         if (!$request->start_date && !$request->end_date && !$request->regions) {
@@ -43,6 +52,19 @@ class ReportController extends Controller
     public function pendingReports()
     {
         $regions = explode(',', auth()->user()->regions ?? []);
+        $auth_user = auth()->user();
+        if ($auth_user->role === 'super') {
+            $all_regions = Store::distinct()
+                ->pluck('Region')
+                ->sort()
+                ->values();
+        } else {
+            $all_regions = Store::distinct()
+                ->whereIn('Region', $regions)
+                ->pluck('Region')
+                ->sort()
+                ->values();
+        }
         $reports = ScheduleApproval::with('store')
             ->whereHas('store', function ($query) use ($regions) {
                 $query->whereIn('Region', $regions);
