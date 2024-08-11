@@ -40,7 +40,7 @@ class ReportController extends Controller
     public function pendingReports()
     {
         $regions = explode(',',auth()->user()->regions ?? []);
-        $reports = ScheduleApproval::whereHas('store', function ($query) use ($regions) {
+        $reports = ScheduleApproval::with('store')->whereHas('store', function ($query) use ($regions) {
             $query->whereIn('region', $regions); // Filtering stores by user's regions
         })
         ->where('Approved', 0) // Pending reports

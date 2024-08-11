@@ -48,7 +48,7 @@
                                     </td>
 
                                     <td class="align-middle">
-                                        {{$report->Region}}
+                                        {{$report->store?->Region}}
                                     </td>
                                     <td class="align-middle" name="unitNo">
                                         {{$report->UnitNo}}
