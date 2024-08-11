@@ -40,21 +40,16 @@ class ReportController extends Controller
     public function pendingReports()
     {
         $regions = explode(',', auth()->user()->regions ?? []);
-        // $reports = ScheduleApproval::with('store')->whereHas('store', function ($query) use ($regions) {
-        //     $query->whereIn('region', $regions); // Filtering stores by user's regions
-        // })
-        // ->where('Approved', 0) // Pending reports
-        // ->get();
-        $reports = ScheduleApproval::with('store') // Eager load the store relationship
+        $reports = ScheduleApproval::with('store')
             ->whereHas('store', function ($query) use ($regions) {
-                $query->whereIn('Region', $regions); // Filter stores by user's regions
+                $query->whereIn('Region', $regions);
             })
-            ->where('Approved', 0) // Pending reports
-            ->join('tblstores', 'tblscheduleapproval.UnitNo', '=', 'tblstores.StoreNumber') // Join stores table
-            ->orderBy('tblstores.Region', 'asc') // Order by region
-            ->orderBy('tblstores.StoreNumber', 'asc') // Order by store number within region
-            ->orderBy('tblscheduleapproval.ScheduleDate', 'asc') // Order by schedule date
-            ->select('tblscheduleapproval.*') // Select fields from schedule approvals
+            ->where('Approved', 0)
+            ->join('tblstores', 'tblscheduleapproval.UnitNo', '=', 'tblstores.StoreNumber')
+            ->select('tblscheduleapproval.*', 'tblstores.Region as store_region', 'tblstores.StoreNumber as store_number')
+            ->orderBy('store_region', 'asc')
+            ->orderBy('store_number', 'asc')
+            ->orderBy('tblscheduleapproval.ScheduleDate', 'asc')
             ->get();
 
         return view('pending-reports', compact('reports'));
