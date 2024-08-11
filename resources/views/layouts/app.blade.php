@@ -20,30 +20,7 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            {{-- <div class="container-fluid">
-                <a class="navbar-brand" href="#">Hardees</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Admin</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Pending</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Report</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Profile</a>
-                        </li>
-                    </ul>
-                </div>
-            </div> --}}
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
                     <img src="{{ asset('Hardees_logo.svg') }}" alt="Logo" style="height: 40px; margin-right: 10px;">
@@ -142,4 +119,8 @@ body{
     color:white!important;
     font-weight: bold;
 }
+.table-responsive {
+        overflow-y: auto; /* Scrollable table setup */
+        height: 600px; /* Set to whatever height you prefer */
+    }
 </style>
