@@ -21,7 +21,10 @@ class UserController extends Controller
     }
     public function create()
     {
-        $regions = \array_unique(Store::pluck('Region')->toArray());
+        $regions = Store::distinct()
+        ->pluck('Region')
+        ->sort()
+        ->values();
         return view('users.create', compact('regions'));
     }
 
@@ -31,7 +34,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
+            'password' => 'required|min:6|confirmed',
             'regions' => 'nullable|array',
             'role' => 'required|string'
         ]);
@@ -56,7 +59,10 @@ class UserController extends Controller
     }
     public function edit($id)
     {
-        $regions = \array_unique(Store::pluck('Region')->toArray());
+        $regions = Store::distinct()
+        ->pluck('Region')
+        ->sort()
+        ->values();
         $user = User::findOrFail($id); // Find the user or fail
         return view('users.edit', compact('user', 'regions'));
     }
@@ -68,15 +74,16 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'     . $id,
             'regions' => 'sometimes|nullable|array',
-            'role' => 'sometimes|string'
+            'role' => 'sometimes|string',
+            'password' => 'required|min:6|confirmed',
         ]);
 
         $auth_user = auth()->user();
         $user = User::findOrFail($id);
-        if ($auth_user->role !== 'super' && $user->role === 'super') {
+        if ($auth_user->role !== 'super' && $user->role === 'super' && $user->id !== $auth_user->id) {
             return redirect()->route('users.index')->with('error', 'You cannot update a super user.');
         }
-        if ($auth_user->role === 'admin' && $user->role === 'admin') {
+        if ($auth_user->role === 'admin' && $user->role === 'admin' && $user->id !== $auth_user->id) {
             return redirect()->route('users.index')->with('error', 'You cannot update an admin user.');
         }
         $user->name = $request->name;
@@ -94,6 +101,9 @@ class UserController extends Controller
 
         $user->save();
 
+        if($user->id === $auth_user->id){
+            return redirect()->route('profile')->with('success', 'Profile updated successfully.');
+        }
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
     public function destroy($id)

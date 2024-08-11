@@ -18,8 +18,13 @@
                     <input type="email" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
+                    <label for="password" class="form-label">Password (Minimum 6 characters)</label>
                     <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password_confirm" class="form-label">Confirm Password (Minimum 6 characters)</label>
+                    <input type="password" class="form-control" id="password_confirm" name="password_confirmation"
+                        value="" required>
                 </div>
                 <div class="mb-3">
                     <label for="regions" class="form-label">Regions</label>

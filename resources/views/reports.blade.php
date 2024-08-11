@@ -122,7 +122,7 @@
                                         @if($report->Approved) &#10004; @endif</td>
 
                                     <td class="align-middle">
-                                        {{$report->Region}}
+                                        {{$report->store?->Region}}
                                     </td>
 
                                     <td class="align-middle" name="unitNo">

@@ -11,9 +11,16 @@ class ReportController extends Controller
     public function reports(Request $request)
     {
         $regions = explode(',',auth()->user()->regions ?? []);
-        $all_regions = \array_unique(Store::pluck('Region')->toArray());
+        $all_regions = Store::distinct()
+        ->pluck('Region')
+        ->sort()
+        ->values();
 
-        $reports = ScheduleApproval::whereHas('store', function ($query) use ($regions, $request) {
+        $reports = [];
+        if (!$request->start_date && !$request->end_date && !$request->regions) {
+            return view('reports', compact('all_regions','reports'));
+        }
+        $reports = ScheduleApproval::with('store')->whereHas('store', function ($query) use ($regions, $request) {
             $query->whereIn('region', $regions)
             ->when($request->regions, function ($query, $regions) {
                 return $query->whereIn('region', $regions);

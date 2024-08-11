@@ -27,7 +27,8 @@ Route::middleware(['auth'])->group(function () {
     // Route::post('users', [UserController::class, 'store'])->name('users.store');
     // Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::middleware(['isAdmin'])->group(function () {
-        Route::resource('users', UserController::class);
+        Route::resource('users', UserController::class)->except(['update']);
     });
+    Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::get('profile', [UserController::class, 'profile'])->name('profile');
 });
