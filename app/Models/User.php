@@ -41,4 +41,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+     public function getSortedRegionsAttribute()
+    {
+        // Get the regions attribute and explode it into an array
+        $regions = explode(',', $this->regions);
+
+        // Sort the array numerically
+        sort($regions, SORT_NUMERIC);
+
+        // Return the sorted array
+        return implode(',',$regions);
+    }
 }

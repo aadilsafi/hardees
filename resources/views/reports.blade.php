@@ -43,7 +43,10 @@
                     <div class="col-md-3 text-center">
                         <div class="card mt-1">
                             <div class="card-body">
-                                <h5 class="card-title">Select Regions </h5>
+                                <h5 class="card-title">Select Regions</h5>
+                                <label for="">
+                                    (cntrl-click to select multiple cntrl-a to select all)
+                                </label>
                                 <fieldset>
                                     <select class="selectpicker form-control" name="regions[]" multiple>
                                         @foreach($all_regions as $region)

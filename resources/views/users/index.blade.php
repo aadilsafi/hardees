@@ -41,7 +41,7 @@
                                 {{$user->role}}
                             </td>
                             <td class="align-middle" style="word-wrap: break-word;min-width: 125px;max-width: 15px;">
-                                {{$user->regions}}
+                                {{$user->sorted_regions}}
                             </td>
                             <td class="align-middle">
                                 <a href="{{route('users.edit',$user->id)}}" class="btn btn-primary btn-sm">Edit</a>
