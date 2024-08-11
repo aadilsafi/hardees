@@ -47,11 +47,11 @@ class ReportController extends Controller
             ->where('Approved', 0)
             ->join('tblstores', 'tblscheduleapproval.UnitNo', '=', 'tblstores.StoreNumber')
             ->select('tblscheduleapproval.*', 'tblstores.Region as store_region', 'tblstores.StoreNumber as store_number')
-            ->orderBy('store_region', 'asc')
-            ->orderBy('store_number', 'asc')
-            ->orderBy('tblscheduleapproval.ScheduleDate', 'asc')
             ->get();
 
+        $reports = $reports->sortBy('store_region')
+            ->sortBy('store_number')
+            ->sortBy('ScheduleDate');
         return view('pending-reports', compact('reports'));
     }
     public function reportStatusToggle($id)
