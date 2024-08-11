@@ -45,9 +45,10 @@ class ReportController extends Controller
         // })
         // ->where('Approved', 0) // Pending reports
         // ->get();
-        $reports = ScheduleApproval::whereHas('store', function ($query) use ($regions) {
-            $query->whereIn('Region', $regions); // Filtering stores by user's regions
-        })
+        $reports = ScheduleApproval::with('store') // Eager load the store relationship
+            ->whereHas('store', function ($query) use ($regions) {
+                $query->whereIn('Region', $regions); // Filter stores by user's regions
+            })
             ->where('Approved', 0) // Pending reports
             ->join('tblstores', 'tblscheduleapproval.UnitNo', '=', 'tblstores.StoreNumber') // Join stores table
             ->orderBy('tblstores.Region', 'asc') // Order by region
