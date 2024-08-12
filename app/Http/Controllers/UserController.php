@@ -51,7 +51,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'regions' => implode(',', $request->regions),
+            'regions' => implode(',', $request->regions ?? []),
             'role' => $request->role
         ]);
 
@@ -89,7 +89,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         if ($request->filled('regions')) {
-            $user->regions = implode(',', $request->regions);
+            $user->regions = implode(',', $request->regions ?? []);
         }
         if ($request->filled('role')) {
             $user->role = $request->role;
