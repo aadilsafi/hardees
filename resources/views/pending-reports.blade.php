@@ -80,7 +80,7 @@
 
                                     <!-- The random number at the end of the PDF is to force it to use a new version of the file and not load a cached version on page reload/load  -->
                                     <td class="align-middle"> <a
-                                            href="{{ route('download.pdf', ['unit' => $report->UnitNo, 'filename' => 'Schedule-' . $report->UnitNo . '-WeekOf-' . $report->ScheduleDate . '.pdf']) }}"
+                                            href="{{ route('download.pdf', ['unit' => $report->UnitNo, 'filename' => 'Schedule-' . $report->UnitNo . '-Weekof-' . $report->ScheduleDate . '.pdf']) }}"
                                             target="_blank" style="text-decoration:underline;cursor: pointer">
                                             {{$report->ScheduleName}}
                                         </a></td>
