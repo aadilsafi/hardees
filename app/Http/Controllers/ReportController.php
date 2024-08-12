@@ -89,6 +89,7 @@ class ReportController extends Controller
     public function downloadPDF($unit, $filename)
     {
         $path = "SchedulerNet_SchedulePDFs/{$unit}/{$filename}";
+        dd($path);
         if (!file_exists($path)) {
             abort(404);
         }
