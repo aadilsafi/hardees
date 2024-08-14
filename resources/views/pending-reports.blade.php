@@ -53,7 +53,7 @@
 
                             <thead class="table table-dark sticky-top">
 
-                                <th width="5%">Submit</th>
+                                <th width="5%">Status</th>
 
                                 <th>Region</th>
                                 <th>Unit No</th>
