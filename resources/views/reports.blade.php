@@ -78,7 +78,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h2 class="display-6 text-center fw-bold">Approval Status</h2>
+            <h2 class="display-6 text-center fw-bold">Schedule Status</h2>
         </div>
         <div class="card-body">
 
