@@ -91,7 +91,6 @@
 
                                 <th width="5%">Submit</th>
                                 <th width="5%">Approved Status</th>
-                                <th width="5%">Published Status</th>
                                 <th>Region</th>
                                 <th>Unit No</th>
                                 <th width="10%">Schedule Date</th>
@@ -115,7 +114,7 @@
 
                                     <td class="align-middle">
                                         @if($report->Published)
-                                        <button class="btn btn-sm" style="background-color: grey">Published</button>
+                                        <button class="btn btn-sm text-light" style="background-color: grey">Published</button>
                                         @else
                                         <form action="{{ route('report.toggle', $report->ID)}}" method="POST">
                                             @csrf
@@ -129,10 +128,6 @@
                                     <td align="center"
                                         style="text-align:center; font-size:150%; font-weight:bold; color:green;">
                                         @if($report->Approved) &#10004; @endif
-                                    </td>
-                                    <td align="center"
-                                        style="text-align:center; font-size:150%; font-weight:bold; color:green;">
-                                        @if($report->Published) &#10004; @endif
                                     </td>
 
                                     <td class="align-middle">
