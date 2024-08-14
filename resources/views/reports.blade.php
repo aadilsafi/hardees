@@ -11,7 +11,7 @@
                 <div class="row d-flex">
                     <div class="col-md-3 text-center">
                         <div class="card mt-1">
-                            <div class="card-body">
+                            <div class="card-body bg-dark text-light rounded">
                                 <h5 class="card-title">Start Week </h5>
 
                                 <fieldset>
@@ -27,7 +27,7 @@
 
                     <div class="col-md-3 text-center">
                         <div class="card mt-1">
-                            <div class="card-body">
+                            <div class="card-body bg-dark text-light rounded">
                                 <h5 class="card-title">End Week </h5>
 
                                 <fieldset>
@@ -42,7 +42,7 @@
 
                     <div class="col-md-3 text-center">
                         <div class="card mt-1">
-                            <div class="card-body">
+                            <div class="card-body bg-dark text-light rounded">
                                 <h5 class="card-title">Select Regions</h5>
                                 <label for="">
                                     (cntrl-click to select multiple cntrl-a to select all)
@@ -51,7 +51,8 @@
                                     <select class="selectpicker form-control" name="regions[]" multiple>
                                         @foreach($all_regions as $region)
 
-                                        <option value="{{$region}}" {{in_array($region,request()->regions ?? []) ? 'Selected'
+                                        <option value="{{$region}}" {{in_array($region,request()->regions ?? []) ?
+                                            'Selected'
                                             : ''}}>{{$region}}</option>
                                         @endforeach
                                     </select>
@@ -62,10 +63,10 @@
 
                     <div class="col-md-3 text-center">
                         <div class="card mt-1">
-                            <div class="card-body">
-                                <h5 class="card-title"> </h5>
+                            <div class="card-body bg-dark text-light rounded">
                                 <fieldset>
-                                    <a href="{{route('reports')}}" class="btn btn-sm btn-primary form-control my-2 mt-4" type="submit" name="clear">Clear Filters</a>
+                                    <a href="{{route('reports')}}" class="btn btn-sm btn-primary form-control mb-2"
+                                        type="submit" name="clear">Clear Filters</a>
                                     <button class="btn btn-sm btn-primary form-control" type="submit">Submit</button>
                                 </fieldset>
                             </div>
@@ -90,6 +91,7 @@
 
                                 <th width="5%">Submit</th>
                                 <th width="5%">Approved Status</th>
+                                <th width="5%">Published Status</th>
                                 <th>Region</th>
                                 <th>Unit No</th>
                                 <th width="10%">Schedule Date</th>
@@ -99,7 +101,8 @@
                                 <th>vs Last Year</th>
                                 <th>Labor Pct</th>
                                 <th>Labor hrs +-/</th>
-                                <th>OT Hrs</8h>
+                                <th>OT Hrs</th>
+                                <th>-</th>
                                 <th width="28%">Approved By</th>
 
                             </thead>
@@ -110,7 +113,10 @@
                                 <tr>
 
 
-                                    <td>
+                                    <td class="align-middle">
+                                        @if($report->Published)
+                                        <button class="btn btn-sm" style="background-color: grey">Published</button>
+                                        @else
                                         <form action="{{ route('report.toggle', $report->ID)}}" method="POST">
                                             @csrf
                                             @method('put')
@@ -118,11 +124,16 @@
                                                 class="btn {{$report->Approved ? 'btn-danger'  :'btn-primary'}} btn-sm"
                                                 type="submit">{{$report->Approved ? 'Revoke' :'Approve'}}</button>
                                         </form>
-                                    </td>
+                                        @endif
                                     </td>
                                     <td align="center"
                                         style="text-align:center; font-size:150%; font-weight:bold; color:green;">
-                                        @if($report->Approved) &#10004; @endif</td>
+                                        @if($report->Approved) &#10004; @endif
+                                    </td>
+                                    <td align="center"
+                                        style="text-align:center; font-size:150%; font-weight:bold; color:green;">
+                                        @if($report->Published) &#10004; @endif
+                                    </td>
 
                                     <td class="align-middle">
                                         {{$report->store?->Region}}
@@ -155,7 +166,13 @@
                                     <td class="align-middle">
                                         {{$report->OvertimeHours}}
                                     </td>
-
+                                    <td class="align-middle">
+                                        <a
+                                            href="{{ route('download.pdf', ['unit' => $report->UnitNo, 'filename' => 'Schedule-' . $report->UnitNo . '-Weekof-' . $report->ScheduleDate . '.pdf']) }}"
+                                            target="_blank" style="text-decoration:underline;cursor: pointer">
+                                            <i class="fa fa-file-pdf-o items-center" style="font-size:20px;"></i>
+                                        </a>
+                                    </td>
                                     <td class="align-middle">{{$report->ApprovedBy}}</td>
 
                                 </tr>

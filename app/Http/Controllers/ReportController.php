@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\ScheduleApproval;
 use App\Models\Store;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ReportController extends Controller
 {
@@ -52,6 +54,7 @@ class ReportController extends Controller
     public function pendingReports()
     {
         $regions = explode(',', auth()->user()->regions ?? []);
+        $missing_reports =  $this->checkMissingReports($regions);
         $auth_user = auth()->user();
         if ($auth_user->role === 'super') {
             $all_regions = Store::distinct()
@@ -75,7 +78,7 @@ class ReportController extends Controller
             ->get();
 
         $reports = $reports->sortBy('store_region');
-        return view('pending-reports', compact('reports'));
+        return view('pending-reports', compact('reports', 'missing_reports'));
     }
     public function reportStatusToggle($id)
     {
@@ -94,5 +97,37 @@ class ReportController extends Controller
         }
 
         return response()->file($path);
+    }
+
+    public function checkMissingReports($regions = [])
+    {
+        $baseDir = 'SchedulerNet_SchedulePDFs';
+        $missing_files = [];
+        $start_day = \config('app.start_day');
+        $now = Carbon::now();
+        if ($now->dayOfWeek() >= $start_day) {
+            $previous_week = $now->startOfWeek($start_day)->format('Y-m-d');
+            $stores = Store::when($regions, function ($query, $regions) {
+                return $query->whereIn('Region', $regions);
+            })->get();
+
+            foreach ($stores as $store) {
+                $unit_no = $store->StoreNumber;
+                $unit_dir = $baseDir . '/' . $unit_no;
+
+                if (File::exists($unit_dir)) {
+                    $expectedFile = "Schedule-{$unit_no}-Weekof-{$previous_week}.pdf";
+                    if (!File::exists($unit_dir . '/' . $expectedFile)) {
+                        $missing_files[] = [
+                            'unit_no' => $unit_no,
+                            'week' => $previous_week,
+                            'missing_file' => $expectedFile,
+                            'region'       => $store->Region,
+                        ];
+                    }
+                }
+            }
+        }
+        return $missing_files;
     }
 }

@@ -2,6 +2,45 @@
 
 @section('content')
 <div class="container">
+    <div class="modal modal-lg fade" id="missing_reportsModal" tabindex="-1" role="dialog" aria-labelledby="missing_reportsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="w-100 display-6 text-center fw-bold" id="missing_reportsModalLabel">Missing Schedule Reports</h3>
+                </div>
+                <div class="modal-body px-5" style="max-height: 50vh; overflow-y: auto;">
+                    @if(count($missing_reports) > 0)
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Unit No</th>
+                                <th>Week</th>
+                                <th>Missing File</th>
+                                <th>Region</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($missing_reports as $report)
+                            <tr>
+                                <td>{{ $report['unit_no'] }}</td>
+                                <td>{{ $report['week'] }}</td>
+                                <td>{{ $report['missing_file'] }}</td>
+                                <td>{{ $report['region']}}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    @else
+                    <p>No missing reports for the previous week.</p>
+                    @endif
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="card">
         <div class="card-header">
             <h2 class="display-6 text-center fw-bold">Schedules - Pending Approval</h2>
@@ -79,11 +118,12 @@
                                     </td>
 
                                     <!-- The random number at the end of the PDF is to force it to use a new version of the file and not load a cached version on page reload/load  -->
-                                    <td class="align-middle"> <a
-                                            href="{{ route('download.pdf', ['unit' => $report->UnitNo, 'filename' => 'Schedule-' . $report->UnitNo . '-Weekof-' . $report->ScheduleDate . '.pdf']) }}"
+                                    <td class="align-middle">
+                                        <a href="{{ route('download.pdf', ['unit' => $report->UnitNo, 'filename' => 'Schedule-' . $report->UnitNo . '-Weekof-' . $report->ScheduleDate . '.pdf']) }}"
                                             target="_blank" style="text-decoration:underline;cursor: pointer">
                                             {{$report->ScheduleName}}
-                                        </a></td>
+                                        </a>
+                                    </td>
 
 
                                 </tr>
@@ -97,4 +137,13 @@
         </div>
     </div>
 </div>
+@if(count($missing_reports) > 0)
+<script>
+    $(document).ready(function() {
+        console.log('here');
+        $('#missing_reportsModal').modal('show');
+    });
+</script>
+@endif
 @endsection
+
