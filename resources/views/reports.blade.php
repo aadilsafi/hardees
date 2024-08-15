@@ -163,7 +163,7 @@
                                     </td>
                                     <td class="align-middle">
                                         <a
-                                            href="{{ route('download.pdf', ['unit' => $report->UnitNo, 'filename' => 'Schedule-' . $report->UnitNo . '-WeekOf-' . $report->ScheduleDate . '.pdf']) }}"
+                                            href="{{ route('download.pdf', ['unit' => $report->UnitNo, 'filename' => $report->ScheduleName]) }}"
                                             target="_blank" style="text-decoration:underline;cursor: pointer">
                                             <i class="fa fa-file-pdf-o items-center" style="font-size:20px;"></i>
                                         </a>
