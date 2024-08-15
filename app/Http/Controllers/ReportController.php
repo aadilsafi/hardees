@@ -116,7 +116,7 @@ class ReportController extends Controller
                 $unit_dir = $baseDir . '/' . $unit_no;
 
                 if (File::exists($unit_dir)) {
-                    $expectedFile = "Schedule-{$unit_no}-Weekof-{$previous_week}.pdf";
+                    $expectedFile = "Schedule-{$unit_no}-WeekOf-{$previous_week}.pdf";
                     if (!File::exists($unit_dir . '/' . $expectedFile)) {
                         $missing_files[] = [
                             'unit_no' => $unit_no,
