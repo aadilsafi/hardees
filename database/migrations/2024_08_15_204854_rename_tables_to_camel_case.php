@@ -18,7 +18,7 @@ return new class extends Migration
         if (Schema::hasTable('tblscheduleapproval') && !Schema::hasTable('tblScheduleApproval')) {
             Schema::rename('tblscheduleapproval', 'tblScheduleApproval');
         }
-        if (Schema::hasTable('tblstores') && !Schema::hasTable('tblStores')) {
+        if (Schema::hasTable('tblstores')) {
             Schema::rename('tblstores', 'tblStores');
         }
         if (Schema::hasTable('tblusers')){
