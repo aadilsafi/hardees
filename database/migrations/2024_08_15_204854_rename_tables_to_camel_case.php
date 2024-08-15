@@ -21,6 +21,9 @@ return new class extends Migration
         if (Schema::hasTable('tblstores') && !Schema::hasTable('tblStores')) {
             Schema::rename('tblstores', 'tblStores');
         }
+        if (Schema::hasTable('tblusers')){
+            Schema::dropIfExists('tblusers');
+        }
     }
 
     /**
