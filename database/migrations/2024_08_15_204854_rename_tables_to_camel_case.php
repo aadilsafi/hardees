@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         // check if schema exists then do the renaming and the new name should also not exist
-        if (Schema::hasTable('users')) {
+        if (Schema::hasTable('users') && !Schema::hasTable('tblUsers')) {
             Schema::rename('users', 'tblUsers');
         }
-        if (Schema::hasTable('tblscheduleapproval')) {
+        if (Schema::hasTable('tblscheduleapproval') && !Schema::hasTable('tblScheduleApproval')) {
             Schema::rename('tblscheduleapproval', 'tblScheduleApproval');
         }
-        if (Schema::hasTable('tblstores')) {
+        if (Schema::hasTable('tblstores') && !Schema::hasTable('tblStores')) {
             Schema::rename('tblstores', 'tblStores');
         }
     }
