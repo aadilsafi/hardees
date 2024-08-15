@@ -33,7 +33,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:tblUsers,email',
             'password' => 'required|min:6|confirmed',
             'regions' => 'nullable|array',
             'role' => 'required|string'
@@ -72,7 +72,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,'     . $id,
+            'email' => 'required|email|unique:tblUsers,email,'     . $id,
             'regions' => 'sometimes|nullable|array',
             'role' => 'sometimes|string',
             'password' => 'required|min:6|confirmed',

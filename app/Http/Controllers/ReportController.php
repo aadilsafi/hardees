@@ -43,9 +43,9 @@ class ReportController extends Controller
             ->when($request->end_date, function ($query, $end_date) {
                 return $query->where('ScheduleDate', '<=', $end_date);
             })
-            ->join('tblstores', 'tblscheduleapproval.UnitNo', '=', 'tblstores.StoreNumber')
-            ->orderBy('tblstores.region', 'asc') // Add ordering by region here to affect the main query.
-            ->select('tblscheduleapproval.*', 'tblstores.region as store_region') // Optionally select the region if needed for display or further logic.
+            ->join('tblStores', 'tblScheduleApproval.UnitNo', '=', 'tblStores.StoreNumber')
+            ->orderBy('tblStores.region', 'asc') // Add ordering by region here to affect the main query.
+            ->select('tblScheduleApproval.*', 'tblStores.region as store_region') // Optionally select the region if needed for display or further logic.
             ->get();
         $reports = $reports->sortBy('store_region');
         return view('reports', compact('reports', 'all_regions'));
@@ -73,8 +73,8 @@ class ReportController extends Controller
                 $query->whereIn('Region', $regions);
             })
             ->where('Approved', 0)
-            ->join('tblstores', 'tblscheduleapproval.UnitNo', '=', 'tblstores.StoreNumber')
-            ->select('tblscheduleapproval.*', 'tblstores.Region as store_region', 'tblstores.StoreNumber as store_number')
+            ->join('tblStores', 'tblScheduleApproval.UnitNo', '=', 'tblStores.StoreNumber')
+            ->select('tblScheduleApproval.*', 'tblStores.Region as store_region', 'tblStores.StoreNumber as store_number')
             ->get();
 
         $reports = $reports->sortBy('store_region');

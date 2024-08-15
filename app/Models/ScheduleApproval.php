@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ScheduleApproval extends Model
 {
     use HasFactory;
-    protected $table = 'tblscheduleapproval';
+    protected $table = 'tblScheduleApproval';
     public $timestamps = false;
     protected $fillable = ['Approved', 'ApprovedBy'];
     protected $primaryKey = 'ID';
