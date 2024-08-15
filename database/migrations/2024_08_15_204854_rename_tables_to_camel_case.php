@@ -24,6 +24,9 @@ return new class extends Migration
         if (Schema::hasTable('tblusers')){
             Schema::dropIfExists('tblusers');
         }
+        if (Schema::hasTable('tblscheduleapproval')){
+            Schema::dropIfExists('tblscheduleapproval');
+        }
     }
 
     /**
