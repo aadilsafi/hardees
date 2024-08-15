@@ -119,7 +119,6 @@ class UserController extends Controller
         if ($auth_user->role === 'admin' && $user->role === 'admin') {
             return redirect()->route('users.index')->with('error', 'You cannot delete an admin user.');
         }
-        dd('here');
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
