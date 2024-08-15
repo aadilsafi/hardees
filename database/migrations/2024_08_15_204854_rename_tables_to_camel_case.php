@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        // check if schema exists then do the renaming and the new name should also not exist
+        if (Schema::hasTable('users')) {
             Schema::rename('users', 'tblUsers');
-        });
-        Schema::table('tblscheduleapproval', function (Blueprint $table) {
+        }
+        if (Schema::hasTable('tblscheduleapproval')) {
             Schema::rename('tblscheduleapproval', 'tblScheduleApproval');
-        });
-        Schema::table('tblstores', function (Blueprint $table) {
+        }
+        if (Schema::hasTable('tblstores')) {
             Schema::rename('tblstores', 'tblStores');
-        });
+        }
     }
 
     /**
