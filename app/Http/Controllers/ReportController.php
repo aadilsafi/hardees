@@ -101,7 +101,7 @@ class ReportController extends Controller
 
     public function checkMissingReports($regions = [])
     {
-        $baseDir = 'public/SchedulerNet_SchedulePDFs';
+        $baseDir = 'SchedulerNet_SchedulePDFs';
         $missing_files = [];
         $start_day = \config('app.start_day');
         $now = Carbon::now();
