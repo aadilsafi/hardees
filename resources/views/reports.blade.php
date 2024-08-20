@@ -99,7 +99,7 @@
                                 <th>vs 3wk Avg</th>
                                 <th>vs Last Year</th>
                                 <th>Labor Pct</th>
-                                <th>Labor hrs +-/</th>
+                                <th>Labor hrs +/-</th>
                                 <th>OT Hrs</th>
                                 <th>-</th>
                                 <th width="28%">Approved By</th>

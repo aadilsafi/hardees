@@ -87,7 +87,8 @@ class ReportController extends Controller
             'Approved' => !$report->Approved,
             'ApprovedBy' => $report->Approved ? '' : auth()->user()->name . ' @ ' . now()->format('Y-m-d H:i:s')
         ]);
-        return redirect()->back()->with('success', 'Report updated successfully.');
+
+        return redirect()->back()->with('success', $report->Approved ? 'Schedule was approved.' : 'Schedule was revoked');
     }
     public function downloadPDF($unit, $filename)
     {
