@@ -2,12 +2,42 @@
 
 @section('content')
 <div class="container">
-    <div class="modal modal-lg fade" id="missing_reportsModal" tabindex="-1" role="dialog" aria-labelledby="missing_reportsModalLabel"
+    <div class="modal modal-lg fade" id="commentsModal" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="w-100 display-6 text-center fw-bold" id="missing_reportsModalLabel">Missing Schedule Reports</h3>
+                    <h5 class="modal-title" id="commentModalLabel">Leave a Comment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="commentForm" action="{{route('comment.store')}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="id" id="report-id">
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label for="commentText" class="form-label">Your Comment here</label>
+                            <textarea class="form-control" id="commentText" rows="4" name="comment"
+                                placeholder="Type your comment here..." maxlength="255"></textarea>
+                            <div class="form-text" id="charCount">0/255 characters used</div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submitCommentButton">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal modal-lg fade" id="missing_reportsModal" tabindex="-1" role="dialog"
+        aria-labelledby="missing_reportsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="w-100 display-6 text-center fw-bold" id="missing_reportsModalLabel">Missing Schedule
+                        Reports</h3>
                 </div>
                 <div class="modal-body px-5" style="max-height: 50vh; overflow-y: auto;">
                     @if(count($missing_reports) > 0)
@@ -65,6 +95,7 @@
                                 <th>Labor Pct</th>
                                 <th>Labor hrs +/-</th>
                                 <th>OT Hrs</8h>
+                                <th>-</th>
                                 <th width="28%">Schedule Name</th>
 
                             </thead>
@@ -75,7 +106,7 @@
                                 <tr>
 
 
-                                    <td>
+                                    <td class="align-middle">
                                         <form action="{{ route('report.toggle', $report->ID)}}" method="POST">
                                             @csrf
                                             @method('put')
@@ -83,7 +114,6 @@
                                                 class="btn {{$report->Approved ? 'btn-danger'  :'btn-primary'}} btn-sm"
                                                 type="submit">{{$report->Approved ? 'Revoke' :'Approve'}}</button>
                                         </form>
-                                    </td>
                                     </td>
 
                                     <td class="align-middle">
@@ -115,6 +145,25 @@
                                     </td>
                                     <td class="align-middle">
                                         {{$report->OvertimeHours}}
+                                    </td>
+                                    <td class="align-middle">
+                                        @if($report->Published || $report->Approved)
+                                        <button type="button" class="btn">
+                                            <i class="fa fa-comment" style="color:grey;font-size:20px;"></i>
+                                        </button>
+                                        @else
+                                        <div class="position-relative d-inline-block">
+
+                                            <button type="button" class="btn" data-bs-toggle="modal"
+                                                data-bs-target="#commentsModal" data-comment="{{ $report->Comments }}"
+                                                data-id="{{$report->ID}}">
+                                                <i class="fa fa-comment" style="color:#0d6efd;font-size:20px;"></i>
+                                                @if($report->Comments != '')
+                                                <span class="indicator-dot"></span>
+                                                @endif
+                                            </button>
+                                        </div>
+                                        @endif
                                     </td>
 
                                     <!-- The random number at the end of the PDF is to force it to use a new version of the file and not load a cached version on page reload/load  -->
@@ -156,5 +205,53 @@
     });
 </script>
 @endif
-@endsection
+<script>
+    // Listen for the modal show event to set the comment
+     var commentModal = document.getElementById('commentsModal');
+    commentModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var comment = button.getAttribute('data-comment');
+        var id = button.getAttribute('data-id');
+        var idInput = commentModal.querySelector('#report-id');
+        idInput.value = id;
 
+        var commentText = commentModal.querySelector('#commentText');
+        commentText.value = comment;
+
+        // Trigger input event to update character count on modal open
+        updateCharCount();
+    });
+
+    var commentText = document.getElementById('commentText');
+    var charCount = document.getElementById('charCount');
+    var maxChars = 255;
+
+    // Function to update the character counter
+    function updateCharCount() {
+        var currentLength = commentText.value.length;
+        charCount.textContent = `${currentLength}/${maxChars} characters used`;
+
+        // Prevent user from entering more characters if max is reached
+        if (currentLength >= maxChars) {
+            commentText.value = commentText.value.substring(0, maxChars);
+        }
+    }
+
+    // Update character count as the user types
+    commentText.addEventListener('input', updateCharCount);
+</script>
+<style>
+    /* Small red dot indicator */
+    .indicator-dot {
+        width: 10px;
+        height: 10px;
+        background-color: #dc3545;
+        /* Red color */
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(-50%, 0%);
+    }
+</style>
+@endsection

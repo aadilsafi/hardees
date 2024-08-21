@@ -85,7 +85,8 @@ class ReportController extends Controller
         $report =  ScheduleApproval::findOrFail($id);
         $report->update([
             'Approved' => !$report->Approved,
-            'ApprovedBy' => $report->Approved ? '' : auth()->user()->name . ' @ ' . now()->format('Y-m-d H:i:s')
+            'ApprovedBy' => $report->Approved ? '' : auth()->user()->name . ' @ ' . now()->format('Y-m-d H:i:s'),
+            'Comments' => $report->Approved ? '' : $report->Comments,
         ]);
 
         return redirect()->back()->with('success', $report->Approved ? 'Schedule was approved.' : 'Schedule was revoked.');
@@ -135,5 +136,23 @@ class ReportController extends Controller
     {
         session()->forget('show_modal');
         return response()->json(['status' => 'success']);
+    }
+    public function addComment (Request $request)
+    {
+        $request->validate([
+            'comment' => 'nullable|string',
+            'id' => 'required|exists:tblScheduleApproval,ID',
+        ]);
+        $scheudle = ScheduleApproval::findOrFail($request->id);
+        $comment = trim($request->input('comment'));
+        $comment = str_replace(["\r\n", "\r"], "\n", $comment);
+
+        $comment = preg_replace('/\n+/', "\n", $comment);
+
+        $comment = mb_strcut($comment, 0, 255, 'UTF-8');
+        $scheudle->update([
+            'Comments' => $comment
+        ]);
+        return redirect()->back()->with('success', 'Comment added successfully.');
     }
 }

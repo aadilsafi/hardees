@@ -10,7 +10,7 @@ class ScheduleApproval extends Model
     use HasFactory;
     protected $table = 'tblScheduleApproval';
     public $timestamps = false;
-    protected $fillable = ['Approved', 'ApprovedBy'];
+    protected $fillable = ['Approved', 'ApprovedBy','Comments'];
     protected $primaryKey = 'ID';
 
     public function store()
