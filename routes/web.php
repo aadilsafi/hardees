@@ -31,4 +31,6 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::get('profile', [UserController::class, 'profile'])->name('profile');
+    Route::post('/close-modal-session', [ReportController::class, 'closeModalSession'])->name('close-modal-session');
+
 });

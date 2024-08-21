@@ -137,11 +137,22 @@
         </div>
     </div>
 </div>
-@if(count($missing_reports) > 0)
+@if(session('show_modal') && count($missing_reports) > 0)
 <script>
     $(document).ready(function() {
-        console.log('here');
         $('#missing_reportsModal').modal('show');
+        $('#missing_reportsModal').on('hidden.bs.modal', function () {
+                $.ajax({
+                    url: "{{ route('close-modal-session') }}",
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                    },
+                    success: function(response) {
+                    }
+                });
+            });
+
     });
 </script>
 @endif

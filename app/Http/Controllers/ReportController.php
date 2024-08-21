@@ -131,4 +131,9 @@ class ReportController extends Controller
         }
         return $missing_files;
     }
+    public function closeModalSession(Request $request)
+    {
+        session()->forget('show_modal');
+        return response()->json(['status' => 'success']);
+    }
 }
