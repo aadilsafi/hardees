@@ -225,13 +225,27 @@
         </div>
     </div>
 </div>
+@if(session('comment_modal'))
+<script>
+    var commentsModal = new bootstrap.Modal(document.getElementById('commentsModal'));
+    let g_comment = "{{session('comment_modal_comment')}}";
+    let g_id = "{{session('comment_modal_id')}}";
+    var commentModal = document.getElementById('commentsModal');
+    var idInput = commentModal.querySelector('#report-id');
+    idInput.value = g_id;
+    var commentText = commentModal.querySelector('#commentText');
+    commentText.value = g_comment;
+    commentsModal.show();
+</script>
+@endif
 <script>
     // Listen for the modal show event to set the comment
     var commentModal = document.getElementById('commentsModal');
     commentModal.addEventListener('show.bs.modal', function (event) {
+
         var button = event.relatedTarget;
-        var comment = button.getAttribute('data-comment');
-        var id = button.getAttribute('data-id');
+        var comment =  button.getAttribute('data-comment');
+        var id =  button.getAttribute('data-id');
         var idInput = commentModal.querySelector('#report-id');
         idInput.value = id;
 
