@@ -204,11 +204,17 @@
                                             <i class="fa fa-comment" style="color:grey;font-size:20px;"></i>
                                         </button>
                                         @else
-                                        <button type="button" class="btn" data-bs-toggle="modal"
-                                            data-bs-target="#commentsModal" data-comment="{{ $report->Comments }}"
-                                            data-id="{{$report->ID}}">
-                                            <i class="fa fa-comment" style="color:#0d6efd;font-size:20px;"></i>
-                                        </button>
+                                        <div class="position-relative d-inline-block">
+
+                                            <button type="button" class="btn" data-bs-toggle="modal"
+                                                data-bs-target="#commentsModal" data-comment="{{ $report->Comments }}"
+                                                data-id="{{$report->ID}}">
+                                                <i class="fa fa-comment" style="color:#0d6efd;font-size:20px;"></i>
+                                                @if($report->Comments != '')
+                                                <span class="indicator-dot"></span>
+                                                @endif
+                                            </button>
+                                        </div>
                                         @endif
 
                                     </td>

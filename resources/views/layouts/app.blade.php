@@ -106,6 +106,18 @@
 
 </html>
 <style>
+    /* Small red dot indicator */
+    .indicator-dot {
+        width: 10px;
+        height: 10px;
+        background-color: #dc3545;
+        /* Red color */
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(-50%, 0%);
+    }
 .active{
     color: #000 !important;
     font-weight: bold;

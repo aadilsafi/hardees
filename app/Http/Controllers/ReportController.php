@@ -86,7 +86,7 @@ class ReportController extends Controller
         $report->update([
             'Approved' => !$report->Approved,
             'ApprovedBy' => $report->Approved ? '' : auth()->user()->name . ' @ ' . now()->format('Y-m-d H:i:s'),
-            'Comments' => $report->Approved ? '' : $report->Comments,
+            'Comments' => !$report->Approved ? '' : $report->Comments,
         ]);
         if(!$report->Approved){
             session()->flash('comment_modal', true);
