@@ -237,7 +237,7 @@
 
                                             <button type="button" class="btn" data-bs-toggle="modal"
                                                 data-bs-target="#commentsModal" data-comment="{{ $report->Comments }}"
-                                                data-id="{{$report->ID}}">
+                                                data-id="{{$report->ID}}" data-bs-toggle="tooltip" data-bs-placement="top" title="comment to store">
                                                 <i class="fa fa-comment" style="color:#0d6efd;font-size:20px;"></i>
                                                 @if($report->Comments != '')
                                                 <span class="indicator-dot"></span>
@@ -255,13 +255,14 @@
                                             <div class="position-relative d-inline-block">
                                                 <button type="button" class="btn" data-bs-toggle="modal"
                                                     data-bs-target="#notesModal"
-                                                    data-note="{{ $report->NoteFromStore }}">
+                                                    data-note="{{ $report->NoteFromStore }}" data-bs-toggle="tooltip" data-bs-placement="top" title="note sent from store">
                                                     <i class="fa fa-file-text"
                                                         style="color:#0d6efd;font-size:20px;"></i>
+                                                        <span class="indicator-dot"></span>
                                                 </button>
                                             </div>
                                             @else
-                                            <button type="button" class="btn">
+                                            <button type="button" class="btn" data-bs-toggle="tooltip" data-bs-placement="top" title="note sent from store">
                                                 <i class="fa fa-file-text" style="color:grey;font-size:20px;"></i>
                                             </button>
                                             @endif
