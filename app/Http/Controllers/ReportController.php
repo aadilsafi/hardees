@@ -98,7 +98,7 @@ class ReportController extends Controller
         if ($report->Approved) {
             $message = 'The schedule for Week of ' . $report->ScheduleDate . ' has been approved';
             $subject = 'Schedule Approved';
-            $this->sendEmail($message, $subject, $report->store?->Email);
+            $this->sendEmail($message, $subject, $report->store?->EmailAddress);
         }
         return redirect()->back()->with('success', $report->Approved ? 'Schedule was approved.' : 'Schedule was revoked.');
     }
@@ -171,19 +171,19 @@ class ReportController extends Controller
             $message = "The schedule for Week of " . $schedule->ScheduleDate . " has been revoked";
             // $message .= $schedule->Comments ? "\nThe comment reads: " . $schedule->Comments : "";
             $subject = "Schedule Revoked";
-            $this->sendEmail($message, $subject, $schedule->store?->Email);
+            $this->sendEmail($message, $subject, $schedule->store?->EmailAddress);
             return \redirect()->back();
         } elseif ($request->is_revoke) {
             $message = "The schedule for Week of " . $schedule->ScheduleDate . " has been revoked";
             $message .= $comment ? "\nThe comment reads: " . $comment : "";
             $subject = "Schedule Revoked";
-            $this->sendEmail($message, $subject, $schedule->store?->Email);
+            $this->sendEmail($message, $subject, $schedule->store?->EmailAddress);
             return redirect()->back()->with('success', 'Comment added successfully.');
         }
         $message = "A comment has been submitted for Schedule for Week " . $schedule->ScheduleDate . "\n";
         $message .= $comment ? "\nThe comment reads: " . $comment : "";
         $subject = "Schedule Comment Added";
-        $this->sendEmail($message, $subject, $schedule->store?->Email);
+        $this->sendEmail($message, $subject, $schedule->store?->EmailAddress);
 
         return redirect()->back()->with('success', 'Comment added successfully.');
     }
@@ -203,6 +203,6 @@ class ReportController extends Controller
         $message = 'The schedule for Week of ' . $report->ScheduleDate . ' has been revoked';
         $message .= $report->Comments ? '\nThe comment reads: ' . $report->Comments : '';
         $subject = 'Schedule Revoked';
-        $this->sendEmail($message, $subject, $report->store?->Email);
+        $this->sendEmail($message, $subject, $report->store?->EmailAddress);
     }
 }
