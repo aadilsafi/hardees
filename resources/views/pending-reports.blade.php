@@ -2,6 +2,28 @@
 
 @section('content')
 <div class="container">
+    <div class="modal modal-lg fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="noteModalLabel">Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                    @csrf
+                    <input type="hidden" name="id" id="report-id">
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <p id="noteText"></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+            </div>
+        </div>
+    </div>
     <div class="modal modal-lg fade" id="commentsModal" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -96,6 +118,7 @@
                                 <th>Labor hrs +/-</th>
                                 <th>OT Hrs</8h>
                                 <th>-</th>
+                                <th>-</th>
                                 <th width="28%">Schedule Name</th>
 
                             </thead>
@@ -165,6 +188,24 @@
                                         </div>
                                         @endif
                                     </td>
+                                    <td class="align-middle">
+
+                                        <div class="position-relative d-inline-block">
+
+                                            @if($report->NoteFromStore != '' && $report->NoteFromStore != null)
+                                            <div class="position-relative d-inline-block">
+                                                <button type="button" class="btn" data-bs-toggle="modal"
+                                                    data-bs-target="#notesModal" data-note="{{ $report->NoteFromStore }}">
+                                                    <i class="fa fa-file-text" style="color:#0d6efd;font-size:20px;"></i>
+                                                </button>
+                                            </div>
+                                            @else
+                                            <button type="button" class="btn">
+                                                <i class="fa fa-file-text" style="color:grey;font-size:20px;"></i>
+                                            </button>
+                                            @endif
+                                        </div>
+                                    </td>
 
                                     <!-- The random number at the end of the PDF is to force it to use a new version of the file and not load a cached version on page reload/load  -->
                                     <td class="align-middle">
@@ -221,6 +262,15 @@
         // Trigger input event to update character count on modal open
         updateCharCount();
     });
+
+    var noteModal = document.getElementById('notesModal');
+    noteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var note = button.getAttribute('data-note');
+        var noteText = noteModal.querySelector('#noteText');
+        noteText.textContent = note;
+    });
+
 
     var commentText = document.getElementById('commentText');
     var charCount = document.getElementById('charCount');

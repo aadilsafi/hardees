@@ -2,6 +2,28 @@
 
 @section('content')
 <div class="container">
+    <div class="modal modal-lg fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="noteModalLabel">Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                @csrf
+                <input type="hidden" name="id" id="report-id">
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <p id="noteText"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal modal-lg fade" id="commentsModal" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -24,7 +46,13 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        @if(session('comment_modal'))
+                            {{-- <input type="hidden" name="id" value="{{session('comment_modal_id')}}"> --}}
+                            <input type="hidden" name="is_revoke" value="True">
+                            <button type="submit" class="btn btn-secondary" name="cancel" value="cancel">Cancel</button>
+                        @else
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        @endif
                         <button type="submit" class="btn btn-primary" id="submitCommentButton">Submit</button>
                     </div>
                 </form>
@@ -132,6 +160,7 @@
                                 <th>OT Hrs</th>
                                 <th>-</th>
                                 <th>-</th>
+                                <th>-</th>
                                 <th width="28%">Approved By</th>
 
                             </thead>
@@ -218,8 +247,27 @@
                                         @endif
 
                                     </td>
-                                    <td class="align-middle">{{$report->ApprovedBy}}</td>
+                                    <td class="align-middle">
 
+                                        <div class="position-relative d-inline-block">
+
+                                            @if($report->NoteFromStore != '' && $report->NoteFromStore != null)
+                                            <div class="position-relative d-inline-block">
+                                                <button type="button" class="btn" data-bs-toggle="modal"
+                                                    data-bs-target="#notesModal"
+                                                    data-note="{{ $report->NoteFromStore }}">
+                                                    <i class="fa fa-file-text"
+                                                        style="color:#0d6efd;font-size:20px;"></i>
+                                                </button>
+                                            </div>
+                                            @else
+                                            <button type="button" class="btn">
+                                                <i class="fa fa-file-text" style="color:grey;font-size:20px;"></i>
+                                            </button>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="align-middle">{{$report->ApprovedBy}}</td>
                                 </tr>
                                 @endforeach
 
@@ -260,6 +308,13 @@
 
         // Trigger input event to update character count on modal open
         updateCharCount();
+    });
+    var noteModal = document.getElementById('notesModal');
+    noteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var note = button.getAttribute('data-note');
+        var noteText = noteModal.querySelector('#noteText');
+        noteText.textContent = note;
     });
 
     var commentText = document.getElementById('commentText');

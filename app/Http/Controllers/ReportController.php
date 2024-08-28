@@ -7,6 +7,8 @@ use App\Models\Store;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Mime\Part\TextPart;
 
 class ReportController extends Controller
 {
@@ -88,10 +90,15 @@ class ReportController extends Controller
             'ApprovedBy' => $report->Approved ? '' : auth()->user()->name . ' @ ' . now()->format('Y-m-d H:i:s'),
             'Comments' => !$report->Approved ? '' : $report->Comments,
         ]);
-        if(!$report->Approved){
+        if (!$report->Approved) {
             session()->flash('comment_modal', true);
             session()->flash('comment_modal_comment', $report->Comments);
             session()->flash('comment_modal_id', $report->ID);
+        }
+        if ($report->Approved) {
+            $message = 'The schedule for Week of ' . $report->ScheduleDate . ' has been approved';
+            $subject = 'Schedule Approved';
+            $this->sendEmail($message, $subject, $report->store?->Email);
         }
         return redirect()->back()->with('success', $report->Approved ? 'Schedule was approved.' : 'Schedule was revoked.');
     }
@@ -141,22 +148,61 @@ class ReportController extends Controller
         session()->forget('show_modal');
         return response()->json(['status' => 'success']);
     }
-    public function addComment (Request $request)
+    public function addComment(Request $request)
     {
         $request->validate([
             'comment' => 'nullable|string',
             'id' => 'required|exists:tblScheduleApproval,ID',
         ]);
-        $scheudle = ScheduleApproval::findOrFail($request->id);
+        $schedule = ScheduleApproval::findOrFail($request->id);
+
         $comment = trim($request->input('comment'));
         $comment = str_replace(["\r\n", "\r"], "\n", $comment);
 
         $comment = preg_replace('/\n+/', "\n", $comment);
 
         $comment = mb_strcut($comment, 0, 255, 'UTF-8');
-        $scheudle->update([
-            'Comments' => $comment
-        ]);
+        if (!$request->cancel) {
+            $schedule->update([
+                'Comments' => $comment
+            ]);
+        }
+        if ($request->cancel) {
+            $message = "The schedule for Week of " . $schedule->ScheduleDate . " has been revoked";
+            // $message .= $schedule->Comments ? "\nThe comment reads: " . $schedule->Comments : "";
+            $subject = "Schedule Revoked";
+            $this->sendEmail($message, $subject, $schedule->store?->Email);
+            return \redirect()->back();
+        } elseif ($request->is_revoke) {
+            $message = "The schedule for Week of " . $schedule->ScheduleDate . " has been revoked";
+            $message .= $comment ? "\nThe comment reads: " . $comment : "";
+            $subject = "Schedule Revoked";
+            $this->sendEmail($message, $subject, $schedule->store?->Email);
+            return redirect()->back()->with('success', 'Comment added successfully.');
+        }
+        $message = "A comment has been submitted for Schedule for Week " . $schedule->ScheduleDate . "\n";
+        $message .= $comment ? "\nThe comment reads: " . $comment : "";
+        $subject = "Schedule Comment Added";
+        $this->sendEmail($message, $subject, $schedule->store?->Email);
+
         return redirect()->back()->with('success', 'Comment added successfully.');
+    }
+    public function sendEmail($textMessage, $subject, $email)
+    {
+        if (!$email) {
+            return;
+        }
+        Mail::raw($textMessage, function ($message) use ($email, $subject) {
+            $message->to($email)
+                ->subject($subject);
+        });
+    }
+    public function revokeMail(Request $request)
+    {
+        $report = ScheduleApproval::findOrFail($request->id);
+        $message = 'The schedule for Week of ' . $report->ScheduleDate . ' has been revoked';
+        $message .= $report->Comments ? '\nThe comment reads: ' . $report->Comments : '';
+        $subject = 'Schedule Revoked';
+        $this->sendEmail($message, $subject, $report->store?->Email);
     }
 }
