@@ -100,7 +100,7 @@ class ReportController extends Controller
             $subject = 'Schedule Approved';
             $this->sendEmail($message, $subject, $report->store?->EmailAddress);
         }
-        return redirect()->back()->with('success', $report->Approved ? 'Schedule was approved.' : 'Schedule was revoked.');
+        return redirect()->back()->with('success', $report->Approved ? 'Schedule was approved Store will be notified!' : 'Schedule was revoked Store will be notified!');
     }
     public function downloadPDF($unit, $filename)
     {
@@ -178,14 +178,14 @@ class ReportController extends Controller
             $message .= $comment ? "\nThe comment reads: " . $comment : "";
             $subject = "Schedule Revoked";
             $this->sendEmail($message, $subject, $schedule->store?->EmailAddress);
-            return redirect()->back()->with('success', 'Comment added successfully.');
+            return redirect()->back()->with('success', 'Comment added successfully Store will be notified!');
         }
         $message = "A comment has been submitted for Schedule for Week " . $schedule->ScheduleDate . "\n";
         $message .= $comment ? "\nThe comment reads: " . $comment : "";
         $subject = "Schedule Comment Added";
         $this->sendEmail($message, $subject, $schedule->store?->EmailAddress);
 
-        return redirect()->back()->with('success', 'Comment added successfully.');
+        return redirect()->back()->with('success', 'Comment added successfully Store will be notified!');
     }
     public function sendEmail($textMessage, $subject, $email)
     {
