@@ -120,11 +120,18 @@ class ReportController extends Controller
         $now = Carbon::now();
         if ($now->dayOfWeek() >= $start_day) {
             $previous_week = $now->startOfWeek($start_day)->format('Y-m-d');
-            $stores = Store::when($regions, function ($query, $regions) {
+            $stores = Store::with('scheduleApprovals')->when($regions, function ($query, $regions) {
                 return $query->whereIn('Region', $regions);
             })->get();
 
             foreach ($stores as $store) {
+            if(count($store?->scheduleApprovals) <= 0) continue;
+
+            $min_schedule = $store?->scheduleApprovals?->min('ScheduleDate');
+            // If the minimum schedule date is greater than the previous week, then we don't need to check for missing files.
+            if ($min_schedule > $previous_week) {
+                continue;
+            }
                 $unit_no = $store->StoreNumber;
                 $unit_dir = $baseDir . '/' . $unit_no;
 
