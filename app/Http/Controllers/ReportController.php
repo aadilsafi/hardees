@@ -46,7 +46,8 @@ class ReportController extends Controller
                 return $query->where('ScheduleDate', '<=', $end_date);
             })
             ->join('tblStores', 'tblScheduleApproval.UnitNo', '=', 'tblStores.StoreNumber')
-            ->orderBy('tblStores.region', 'asc') // Add ordering by region here to affect the main query.
+            ->orderBy('tblStores.region', 'desc') // First order by region
+            ->orderBy('tblScheduleApproval.ScheduleDate', 'desc')
             ->select('tblScheduleApproval.*', 'tblStores.region as store_region') // Optionally select the region if needed for display or further logic.
             ->get();
         $reports = $reports->sortBy('store_region');
