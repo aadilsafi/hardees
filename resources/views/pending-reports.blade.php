@@ -163,8 +163,12 @@
                                     <td class="align-middle">
                                         {{$report->LaborPct}}
                                     </td>
-                                    <td class="align-middle">
-                                        {{$report->LaborHrsOverUnder}}
+                                    <td @class(['align-middle', 'text-danger font-weight-bold'=> $report->LaborHrsOverUnder > 0
+                                        ])>
+                                        <div class="d-inline-flex">
+                                            @if($report->LaborHrsOverUnder > 0) <span>+</span> @endif <span>
+                                                {{number_format($report->LaborHrsOverUnder,2)}} </span>
+                                        </div>
                                     </td>
                                     <td class="align-middle">
                                         {{$report->OvertimeHours}}
