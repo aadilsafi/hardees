@@ -47,9 +47,9 @@
                     </div>
                     <div class="modal-footer">
                         @if(session('comment_modal'))
-                            {{-- <input type="hidden" name="id" value="{{session('comment_modal_id')}}"> --}}
-                            <input type="hidden" name="is_revoke" value="True">
-                            <button type="submit" class="btn btn-secondary" name="cancel" value="cancel">Cancel</button>
+                        {{-- <input type="hidden" name="id" value="{{session('comment_modal_id')}}"> --}}
+                        <input type="hidden" name="is_revoke" value="True">
+                        <button type="submit" class="btn btn-secondary" name="cancel" value="cancel">Cancel</button>
                         @else
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         @endif
@@ -215,8 +215,13 @@
                                     <td class="align-middle">
                                         {{$report->LaborPct}}
                                     </td>
-                                    <td class="align-middle">
-                                        {{$report->LaborHrsOverUnder}}
+                                    <td @class([ 'text-danger'=> $report->LaborHrsOverUnder > 0
+                                        ])
+                                        class="align-middle">
+                                        <div class="d-flex d-inline-flex">
+                                            @if($report->LaborHrsOverUnder > 0) <span>+</span> @endif <span>
+                                                {{number_format($report->LaborHrsOverUnder,2)}} </span>
+                                        </div>
                                     </td>
                                     <td class="align-middle">
                                         {{$report->OvertimeHours}}
@@ -237,7 +242,8 @@
 
                                             <button type="button" class="btn" data-bs-toggle="modal"
                                                 data-bs-target="#commentsModal" data-comment="{{ $report->Comments }}"
-                                                data-id="{{$report->ID}}" data-bs-toggle="tooltip" data-bs-placement="top" title="comment to store">
+                                                data-id="{{$report->ID}}" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="comment to store">
                                                 <i class="fa fa-comment" style="color:#0d6efd;font-size:20px;"></i>
                                                 @if($report->Comments != '')
                                                 <span class="indicator-dot"></span>
@@ -255,14 +261,16 @@
                                             <div class="position-relative d-inline-block">
                                                 <button type="button" class="btn" data-bs-toggle="modal"
                                                     data-bs-target="#notesModal"
-                                                    data-note="{{ $report->NoteFromStore }}" data-bs-toggle="tooltip" data-bs-placement="top" title="note sent from store">
+                                                    data-note="{{ $report->NoteFromStore }}" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="note sent from store">
                                                     <i class="fa fa-file-text"
                                                         style="color:#0d6efd;font-size:20px;"></i>
-                                                        <span class="indicator-dot"></span>
+                                                    <span class="indicator-dot"></span>
                                                 </button>
                                             </div>
                                             @else
-                                            <button type="button" class="btn" data-bs-toggle="tooltip" data-bs-placement="top" title="note sent from store">
+                                            <button type="button" class="btn" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="note sent from store">
                                                 <i class="fa fa-file-text" style="color:grey;font-size:20px;"></i>
                                             </button>
                                             @endif
