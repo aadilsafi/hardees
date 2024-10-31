@@ -83,7 +83,7 @@
                                     <i class="fa fa-info-circle text-danger ml-1"
                                         style="font-size:18px; cursor: pointer;" data-toggle="tooltip"
                                         data-placement="top"
-                                        title="Schedule not available. Something must have happened during upload. If the schedule has not been published, you can ask the store to resubmit."></i>
+                                        title="PDF copy of Schedule not available. Something must have happened during upload. If the schedule has not been published, you can ask the store to resubmit."></i>
                                     @endif
                                 </td>
                                 <td>{{ $report['region']}}</td>
