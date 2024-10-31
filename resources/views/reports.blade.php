@@ -230,10 +230,9 @@
                                     <td class="align-middle">
                                         @php
                                         // Construct the full path to check file existence
-                                        $filePath =
-                                        public_path("SchedulerNet_SchedulePDFs/{$report->UnitNo}/{$report->ScheduleName}");
+                                        $fileExists = Storage::disk('pdfs')->exists("{$report->UnitNo}/{$report->ScheduleName}");
                                         @endphp
-                                        @if (File::exists($filePath))
+                                        @if ($fileExists)
                                         <a href="{{ route('download.pdf', ['unit' => $report->UnitNo, 'filename' => $report->ScheduleName]) }}"
                                             target="_blank" style="text-decoration:underline;cursor: pointer">
                                             <i class="fa fa-file-pdf-o items-center" style="font-size:20px;"></i>
