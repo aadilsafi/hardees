@@ -77,7 +77,13 @@
                             <tr>
                                 <td>{{ $report['unit_no'] }}</td>
                                 <td>{{ $report['week'] }}</td>
-                                <td>{{ $report['missing_file'] }}</td>
+                                <td>
+                                    {{ $report['missing_file'] }}
+                                    @if($report['on_db'] ?? false)
+                                    <i class="fa fa-info-circle text-danger ml-1" style="font-size:18px; cursor: pointer;"
+                                    data-toggle="tooltip" data-placement="top" title="Schedule not available. Something must have happened during upload. If the schedule has not been published, you can ask the store to resubmit."></i>
+                                    @endif
+                                </td>
                                 <td>{{ $report['region']}}</td>
                             </tr>
                             @endforeach
@@ -214,10 +220,21 @@
 
                                     <!-- The random number at the end of the PDF is to force it to use a new version of the file and not load a cached version on page reload/load  -->
                                     <td class="align-middle">
+                                        @php
+                                        // Construct the full path to check file existence
+                                        $filePath =
+                                        public_path("SchedulerNet_SchedulePDFs/{$report->UnitNo}/{$report->ScheduleName}");
+                                        @endphp
+                                        @if (File::exists($filePath))
                                         <a href="{{ route('download.pdf', ['unit' => $report->UnitNo, 'filename' => $report->ScheduleName]) }}"
                                             target="_blank" style="text-decoration:underline;cursor: pointer">
                                             {{$report->ScheduleName}}
                                         </a>
+                                        @else
+                                        <a href="#" class="text-danger" style="text-decoration:underline;cursor: pointer;"  data-bs-toggle="modal" data-bs-target="#fileNotFoundModal" data-toggle="tooltip" data-placement="top" title="Schedule not available. Something must have happened during upload. If the schedule has not been published, you can ask the store to resubmit.">
+                                            {{$report->ScheduleName}}
+                                        </a>
+                                        @endif
                                     </td>
 
 
@@ -228,6 +245,24 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap Modal Structure -->
+<div class="modal fade" id="fileNotFoundModal" tabindex="-1" role="dialog" aria-labelledby="fileNotFoundModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fileNotFoundModalLabel">Schedule Not Available</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                Something must have happened during upload. If the schedule has not been published, you can ask the store to resubmit.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

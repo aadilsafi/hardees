@@ -215,7 +215,8 @@
                                     <td class="align-middle">
                                         {{$report->LaborPct}}
                                     </td>
-                                    <td @class(['align-middle', 'text-danger font-weight-bold'=> $report->LaborHrsOverUnder > 0
+                                    <td @class(['align-middle', 'text-danger font-weight-bold'=>
+                                        $report->LaborHrsOverUnder > 0
                                         ])>
                                         <div class="d-inline-flex">
                                             @if($report->LaborHrsOverUnder > 0) <span>+</span> @endif <span>
@@ -225,11 +226,26 @@
                                     <td class="align-middle">
                                         {{$report->OvertimeHours}}
                                     </td>
+
                                     <td class="align-middle">
+                                        @php
+                                        // Construct the full path to check file existence
+                                        $filePath =
+                                        public_path("SchedulerNet_SchedulePDFs/{$report->UnitNo}/{$report->ScheduleName}");
+                                        @endphp
+                                        @if (File::exists($filePath))
                                         <a href="{{ route('download.pdf', ['unit' => $report->UnitNo, 'filename' => $report->ScheduleName]) }}"
                                             target="_blank" style="text-decoration:underline;cursor: pointer">
                                             <i class="fa fa-file-pdf-o items-center" style="font-size:20px;"></i>
                                         </a>
+                                        @else
+                                        <i class="fa fa-file-pdf-o text-danger items-center"
+                                            style="font-size:20px; cursor: pointer;" data-bs-toggle="modal"
+                                            data-bs-target="#fileNotFoundModal"
+                                            data-toggle="tooltip" data-placement="top" title="Schedule not available. Something must have happened during upload. If the schedule has not been published, you can ask the store to resubmit."
+                                            >
+                                        </i>
+                                        @endif
                                     </td>
                                     <td class="align-middle">
                                         @if($report->Published || $report->Approved)
@@ -283,6 +299,24 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap Modal Structure -->
+<div class="modal fade" id="fileNotFoundModal" tabindex="-1" role="dialog" aria-labelledby="fileNotFoundModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-dialog-centered">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fileNotFoundModalLabel">Schedule Not Available</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                Something must have happened during upload. If the schedule has not been published, you can ask the store to resubmit.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

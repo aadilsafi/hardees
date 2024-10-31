@@ -138,12 +138,15 @@ class ReportController extends Controller
 
                 if (File::exists($unit_dir)) {
                     $expectedFile = "Schedule-{$unit_no}-WeekOf-{$previous_week}.pdf";
+                    $on_db = ScheduleApproval::where('ScheduleName', $expectedFile)->exists();
+
                     if (!File::exists($unit_dir . '/' . $expectedFile)) {
                         $missing_files[] = [
                             'unit_no' => $unit_no,
                             'week' => $previous_week,
                             'missing_file' => $expectedFile,
                             'region'       => $store->Region,
+                            'on_db'        => $on_db
                         ];
                     }
                 }
@@ -202,7 +205,8 @@ class ReportController extends Controller
         }
         Mail::raw($textMessage, function ($message) use ($email, $subject) {
             $message->to($email)
-                ->subject($subject);
+                ->subject($subject)
+                ->replyTo(auth()->user()?->email);
         });
     }
     public function revokeMail(Request $request)
