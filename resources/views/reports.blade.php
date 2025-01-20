@@ -220,7 +220,7 @@
                                         ])>
                                         <div class="d-inline-flex">
                                             @if($report->LaborHrsOverUnder > 0) <span>+</span> @endif <span>
-                                                {{is_numeric($report->LaborHrsOverUnder) ? number_format($report->LaborHrsOverUnder,2) : 0}} </span>
+                                                {{is_numeric($report->LaborHrsOverUnder) ? number_format($report->LaborHrsOverUnder,2) : '-'}} </span>
                                         </div>
                                     </td>
                                     <td class="align-middle">
