@@ -230,7 +230,7 @@
                                         $report->OvertimeHours > 0
                                         ])>
                                         <div class="d-inline-flex">
-                                            @if($report->OvertimeHours > 0) <span>+</span> @endif <span>
+                                            <span>
                                                 {{is_numeric($report->OvertimeHours) ?
                                                 number_format($report->OvertimeHours,2) : '-'}} </span>
                                         </div>
