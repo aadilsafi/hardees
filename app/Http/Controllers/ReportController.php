@@ -112,6 +112,15 @@ class ReportController extends Controller
 
         return response()->file($path);
     }
+    public function downloadAudit($unit, $filename)
+    {
+        $path = "SchedulerNet_SchedulePDFs/{$unit}/auditPdfs/{$filename}";
+        if (!file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path);
+    }
 
     public function checkMissingReports($regions = [])
     {

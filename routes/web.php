@@ -23,6 +23,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('reports', [ReportController::class, 'reports'])->name('reports');
     Route::put('reports/{id}/toggle', [ReportController::class, 'reportStatusToggle'])->name('report.toggle');
     Route::get('/schedule-pdfs/{unit}/{filename}', [ReportController::class, 'downloadPDF'])->name('download.pdf');
+    Route::get('/schedule-audits/{unit}/{filename}', [ReportController::class, 'downloadAudit'])->name('download.audit');
+
 
     // Route::get('users/create', [UserController::class, 'create'])->name('users.create');
     // Route::post('users', [UserController::class, 'store'])->name('users.store');
