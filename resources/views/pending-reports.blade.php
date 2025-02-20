@@ -127,8 +127,8 @@
                                 <th>OT Hrs</th>
                                 <th>Audit File</th>
                                 <th>Matrix</th>
-                                <th>-</th>
-                                <th>-</th>
+                                <th>To Store</th>
+                                <th>From Store</th>
                                 <th width="28%">Schedule Name</th>
 
                             </thead>
