@@ -184,7 +184,10 @@
                                     <td @class(['align-middle', 'text-danger font-weight-bold'=>
                                         $report->OvertimeHours > 0
                                         ])>
-                                        {{$report->OvertimeHours}}
+                                        <div class="d-inline-flex">
+                                            @if($report->OvertimeHours > 0) <span>+</span> @endif <span>
+                                                {{is_numeric($report->OvertimeHours) ? number_format($report->OvertimeHours,2) : '-'}} </span>
+                                        </div>
                                     </td>
                                     <td class="align-middle">
                                         @php

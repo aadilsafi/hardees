@@ -222,13 +222,18 @@
                                         ])>
                                         <div class="d-inline-flex">
                                             @if($report->LaborHrsOverUnder > 0) <span>+</span> @endif <span>
-                                                {{is_numeric($report->LaborHrsOverUnder) ? number_format($report->LaborHrsOverUnder,2) : '-'}} </span>
+                                                {{is_numeric($report->LaborHrsOverUnder) ?
+                                                number_format($report->LaborHrsOverUnder,2) : '-'}} </span>
                                         </div>
                                     </td>
                                     <td @class(['align-middle', 'text-danger font-weight-bold'=>
                                         $report->OvertimeHours > 0
                                         ])>
-                                        {{$report->OvertimeHours}}
+                                        <div class="d-inline-flex">
+                                            @if($report->OvertimeHours > 0) <span>+</span> @endif <span>
+                                                {{is_numeric($report->OvertimeHours) ?
+                                                number_format($report->OvertimeHours,2) : '-'}} </span>
+                                        </div>
                                     </td>
                                     <td class="align-middle">
                                         @php
@@ -255,7 +260,8 @@
                                     <td class="align-middle">
                                         @php
                                         // Construct the full path to check file existence
-                                        $fileExists = Storage::disk('pdfs')->exists("{$report->UnitNo}/{$report->ScheduleName}");
+                                        $fileExists =
+                                        Storage::disk('pdfs')->exists("{$report->UnitNo}/{$report->ScheduleName}");
                                         @endphp
                                         @if ($fileExists)
                                         <a href="{{ route('download.pdf', ['unit' => $report->UnitNo, 'filename' => $report->ScheduleName]) }}"
@@ -265,9 +271,9 @@
                                         @else
                                         <i class="fa fa-file-pdf-o text-danger items-center"
                                             style="font-size:20px; cursor: pointer;" data-bs-toggle="modal"
-                                            data-bs-target="#fileNotFoundModal"
-                                            data-toggle="tooltip" data-placement="top" title="Schedule not available. Something must have happened during upload. If the schedule has not been published, you can ask the store to resubmit."
-                                            >
+                                            data-bs-target="#fileNotFoundModal" data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Schedule not available. Something must have happened during upload. If the schedule has not been published, you can ask the store to resubmit.">
                                         </i>
                                         @endif
                                     </td>
