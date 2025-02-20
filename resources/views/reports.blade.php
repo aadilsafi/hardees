@@ -225,7 +225,9 @@
                                                 {{is_numeric($report->LaborHrsOverUnder) ? number_format($report->LaborHrsOverUnder,2) : '-'}} </span>
                                         </div>
                                     </td>
-                                    <td class="align-middle">
+                                    <td @class(['align-middle', 'text-danger font-weight-bold'=>
+                                        $report->OvertimeHours > 0
+                                        ])>
                                         {{$report->OvertimeHours}}
                                     </td>
                                     <td class="align-middle">
@@ -248,7 +250,7 @@
                                         @endif
                                     </td>
                                     <td class="align-middle">
-                                        {{$report->ChartName}}
+                                        {{$report->ChartName ?? '-'}}
                                     </td>
                                     <td class="align-middle">
                                         @php
