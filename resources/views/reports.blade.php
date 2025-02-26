@@ -279,7 +279,7 @@
                                         @endif
                                     </td>
                                     <td class="align-middle">
-                                        @if(($report->Published || $report->Approved) && $report->Comments == '')
+                                        @if($report->Published && $report->Comments == '')
 
                                         <button type="button" class="btn">
                                             <i class="fa fa-comment" style="color:grey;font-size:20px;"></i>
