@@ -38,7 +38,7 @@
                     <div class="modal-body">
 
                         <div class="mb-3">
-                            <label for="commentText" class="form-label" id="comment-modal-heading">Edit or change comments here.  Your previews comments were:</label>
+                            <label for="commentText" class="form-label" id="comment-modal-heading">Edit or change comments here.  Your previous comments were:</label>
                             <textarea class="form-control" id="commentText" rows="4" name="comment"
                                 placeholder="Type your comment here..." maxlength="2000"></textarea>
                             <div class="form-text" id="charCount">0/2000 characters used</div>
@@ -401,7 +401,7 @@
             submitButton.classList.remove('disabled');
             submitButton.classList.remove('btn-secondary')
             document.getElementById('published-schedule-text').classList.add('d-none');
-            document.getElementById('comment-modal-heading').textContent = 'Edit or change comments here.  Your previews comments were:';
+            document.getElementById('comment-modal-heading').textContent = 'Edit or change comments here.  Your previous comments were:';
         }
 
         if(comment == ''){
