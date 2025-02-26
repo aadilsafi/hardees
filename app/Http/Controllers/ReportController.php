@@ -89,7 +89,6 @@ class ReportController extends Controller
         $report->update([
             'Approved' => !$report->Approved,
             'ApprovedBy' => $report->Approved ? '' : auth()->user()->name . ' @ ' . now()->format('Y-m-d H:i:s'),
-            'Comments' => !$report->Approved ? '' : $report->Comments,
         ]);
         if (!$report->Approved) {
             session()->flash('comment_modal', true);
@@ -181,7 +180,7 @@ class ReportController extends Controller
 
         $comment = preg_replace('/\n+/', "\n", $comment);
 
-        $comment = mb_strcut($comment, 0, 255, 'UTF-8');
+        $comment = mb_strcut($comment, 0, 2000, 'UTF-8');
         if (!$request->cancel) {
             $schedule->update([
                 'Comments' => $comment

@@ -40,8 +40,9 @@
                         <div class="mb-3">
                             <label for="commentText" class="form-label">Your Comment here</label>
                             <textarea class="form-control" id="commentText" rows="4" name="comment"
-                                placeholder="Type your comment here..." maxlength="255"></textarea>
-                            <div class="form-text" id="charCount">0/255 characters used</div>
+                                placeholder="Type your comment here..." maxlength="2000"></textarea>
+                            <div class="form-text" id="charCount">0/2000 characters used</div>
+                            <div class="text-danger d-none" id="published-schedule-text">This schedule is published any further comments will not be seen</div>
 
                         </div>
                     </div>
@@ -278,7 +279,8 @@
                                         @endif
                                     </td>
                                     <td class="align-middle">
-                                        @if($report->Published || $report->Approved)
+                                        @if(($report->Published || $report->Approved) && $report->Comments == '')
+
                                         <button type="button" class="btn">
                                             <i class="fa fa-comment" style="color:grey;font-size:20px;"></i>
                                         </button>
@@ -287,6 +289,7 @@
 
                                             <button type="button" class="btn" data-bs-toggle="modal"
                                                 data-bs-target="#commentsModal" data-comment="{{ $report->Comments }}"
+                                                data-published="{{ $report->Published }}"
                                                 data-id="{{$report->ID}}" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="comment to store">
                                                 <i class="fa fa-comment" style="color:#0d6efd;font-size:20px;"></i>
@@ -373,12 +376,30 @@
 
         var button = event.relatedTarget;
         var comment =  button.getAttribute('data-comment');
+        var published = button.getAttribute('data-published');
         var id =  button.getAttribute('data-id');
         var idInput = commentModal.querySelector('#report-id');
         idInput.value = id;
 
         var commentText = commentModal.querySelector('#commentText');
         commentText.value = comment;
+
+        var submitButton = commentModal.querySelector('#submitCommentButton');
+
+        // disable the button and gray out if published is true
+        if (published == '1') {
+            commentText.disabled = true;
+            submitButton.disabled = true;
+            submitButton.classList.add('disabled');
+            submitButton.classList.add('btn-secondary')
+            document.getElementById('published-schedule-text').classList.remove('d-none');
+        } else {
+            commentText.disabled = false;
+            submitButton.disabled = false;
+            submitButton.classList.remove('disabled');
+            submitButton.classList.remove('btn-secondary')
+            document.getElementById('published-schedule-text').classList.add('d-none');
+        }
 
         // Trigger input event to update character count on modal open
         updateCharCount();
@@ -393,7 +414,7 @@
 
     var commentText = document.getElementById('commentText');
     var charCount = document.getElementById('charCount');
-    var maxChars = 255;
+    var maxChars = 2000;
 
     // Function to update the character counter
     function updateCharCount() {
