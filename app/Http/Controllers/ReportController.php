@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ScheduleApproval;
 use App\Models\Store;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
@@ -126,8 +127,17 @@ class ReportController extends Controller
         $baseDir = 'SchedulerNet_SchedulePDFs';
         $missing_files = [];
         $start_day = \config('app.start_day');
+
         $now = Carbon::now();
-        if ($now->dayOfWeek() >= $start_day) {
+
+        // Get the default day of week (0 = Sunday, 1 = SUNDAY, etc.)
+        $defaultDayOfWeek = $now->dayOfWeek;
+
+        // Calculate the relative day of week based on your configuration
+        // If MONDAY (2) is your start day:
+        $relativeDay = ($defaultDayOfWeek - CarbonInterface::MONDAY + 7) % 7;
+
+        if ($relativeDay >= $start_day) {
             $previous_week = $now->startOfWeek($start_day)->format('Y-m-d');
             $stores = Store::with('scheduleApprovals')->when($regions, function ($query, $regions) {
                 return $query->whereIn('Region', $regions);
