@@ -75,6 +75,7 @@
                         </thead>
                         <tbody>
                             @foreach($missing_reports as $report)
+                            @if(!($report['on_db'] ?? false))
                             <tr>
                                 <td>{{ $report['unit_no'] }}</td>
                                 <td>{{ $report['week'] }}</td>
@@ -89,6 +90,7 @@
                                 </td>
                                 <td>{{ $report['region']}}</td>
                             </tr>
+                            @endif
                             @endforeach
                         </tbody>
                     </table>
