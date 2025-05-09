@@ -97,35 +97,35 @@ class ReportController extends Controller
             session()->flash('comment_modal_id', $report->ID);
         }
         if ($report->Approved) {
-            $message = 'The schedule for Week of ' . $report->ScheduleDate . ' has been approved';
+            $message = 'The schedule for Week of ' . $report->ScheduleDate . ' has been approved.';
             $subject = 'Schedule Approved';
             $this->sendEmail($message, $subject, $report->store?->EmailAddress);
             // Check if any metrics are outside of standards
             $metricsOutsideStandards = [];
-
+            $LaborHrsOverUnder = number_format($report->LaborHrsOverUnder,2);
             // Check if hours over/under is outside standards
-            if ($report->LaborHrsOverUnder > config('app.labor_hours_over')) {
+            if ($LaborHrsOverUnder > config('app.labor_hours_over')) {
                 // Add + symbol for positive numbers
-                $formattedHours = '+' . $report->LaborHrsOverUnder;
+                $formattedHours = '+' . $LaborHrsOverUnder;
                 $metricsOutsideStandards[] = "Schedule is {$formattedHours} hours.";
-            } elseif ($report->LaborHrsOverUnder < config('app.labor_hours_under')) {
-                $LaborHrsOverUnder = number_format($report->LaborHrsOverUnder,2);
+            } elseif ($LaborHrsOverUnder < config('app.labor_hours_under')) {
                 $metricsOutsideStandards[] = "Schedule is {$LaborHrsOverUnder} hours.";
             }
 
             // Check if overtime hours are outside standards
-            if (isset($report->OvertimeHours) && $report->OvertimeHours > config('app.overtime_hours_limit')) {
-                $metricsOutsideStandards[] = "Schedule has {$report->OvertimeHours} overtime hours.";
+            $OvertimeHours = \number_format($report->OvertimeHours,2);
+            if (isset($OvertimeHours) && $OvertimeHours > config('app.overtime_hours_limit')) {
+                $metricsOutsideStandards[] = "Schedule has {$OvertimeHours} overtime hours.";
             }
 
             // Only send email if there are metrics outside of standards
             if (!empty($metricsOutsideStandards)) {
                 // Create the message with the specific metrics that are outside standards
-                $message = "Schedule for unit {$report->UnitNo} for week of {$report->ScheduleDate} was approved by {$report->ApprovedBy}.\n";
-                $message .= "This schedule's has metrics that fall outside of company standards as listed below:\n";
-                $message .= implode("\n", $metricsOutsideStandards);
+                $message = "Schedule for unit {$report->UnitNo} for week of {$report->ScheduleDate} was approved by {$report->ApprovedBy}.\n\n";
+                $message .= "This schedule's has metrics that fall outside of company standards as listed below:\n\n";
+                $message .= implode("\n\n", $metricsOutsideStandards);
 
-                $subject = 'Schedule Approved with Warning';
+                $subject = 'Schedule Approved with alert';
                 $emails = $report?->store?->AlertEmailAddress ?? "";
                 $emails = explode(',',$emails);
                 foreach($emails as $email){
