@@ -25,8 +25,12 @@ return [
     | 6 = Saturday
     |--------------------------------------------------------------------------
     */
-    'start_day' => 1,
+    'start_day'             => env('START_DAY',2),
 
+
+    'labor_hours_under'     => env('LABOR_HOURS_UNDER', -20),
+    'labor_hours_over'      => env('LABOR_HOURS_OVER', 20),
+    'overtime_hours_limit'  => env('OVERTIME_HOURS_LIMIT', 2),
 
     'name' => env('APP_NAME', 'Laravel'),
 

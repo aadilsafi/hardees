@@ -100,6 +100,38 @@ class ReportController extends Controller
             $message = 'The schedule for Week of ' . $report->ScheduleDate . ' has been approved';
             $subject = 'Schedule Approved';
             $this->sendEmail($message, $subject, $report->store?->EmailAddress);
+            // Check if any metrics are outside of standards
+            $metricsOutsideStandards = [];
+
+            // Check if hours over/under is outside standards
+            if ($report->LaborHrsOverUnder > config('app.labor_hours_over')) {
+                // Add + symbol for positive numbers
+                $formattedHours = '+' . $report->LaborHrsOverUnder;
+                $metricsOutsideStandards[] = "Schedule is {$formattedHours} hours.";
+            } elseif ($report->LaborHrsOverUnder < config('app.labor_hours_under')) {
+                $LaborHrsOverUnder = number_format($report->LaborHrsOverUnder,2);
+                $metricsOutsideStandards[] = "Schedule is {$LaborHrsOverUnder} hours.";
+            }
+
+            // Check if overtime hours are outside standards
+            if (isset($report->OvertimeHours) && $report->OvertimeHours > config('app.overtime_hours_limit')) {
+                $metricsOutsideStandards[] = "Schedule has {$report->OvertimeHours} overtime hours.";
+            }
+
+            // Only send email if there are metrics outside of standards
+            if (!empty($metricsOutsideStandards)) {
+                // Create the message with the specific metrics that are outside standards
+                $message = "Schedule for unit {$report->UnitNo} for week of {$report->ScheduleDate} was approved by {$report->ApprovedBy}.\n";
+                $message .= "This schedule's has metrics that fall outside of company standards as listed below:\n";
+                $message .= implode("\n", $metricsOutsideStandards);
+
+                $subject = 'Schedule Approved with Warning';
+                $emails = $report?->store?->AlertEmailAddress ?? "";
+                $emails = explode(',',$emails);
+                foreach($emails as $email){
+                    $this->sendEmail($message, $subject, $email);
+                }
+            }
         }
         return redirect()->back()->with('success', $report->Approved ? 'Schedule was approved Store will be notified!' : 'Schedule was revoked Store will be notified!');
     }
@@ -144,13 +176,13 @@ class ReportController extends Controller
             })->get();
 
             foreach ($stores as $store) {
-            if(count($store?->scheduleApprovals) <= 0) continue;
+                if (count($store?->scheduleApprovals) <= 0) continue;
 
-            $min_schedule = $store?->scheduleApprovals?->min('ScheduleDate');
-            // If the minimum schedule date is greater than the previous week, then we don't need to check for missing files.
-            if ($min_schedule > $previous_week) {
-                continue;
-            }
+                $min_schedule = $store?->scheduleApprovals?->min('ScheduleDate');
+                // If the minimum schedule date is greater than the previous week, then we don't need to check for missing files.
+                if ($min_schedule > $previous_week) {
+                    continue;
+                }
                 $unit_no = $store->StoreNumber;
                 $unit_dir = $baseDir . '/' . $unit_no;
 
