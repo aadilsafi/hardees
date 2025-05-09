@@ -21,10 +21,14 @@ class UserController extends Controller
     }
     public function create()
     {
-        $regions = Store::distinct()
-        ->pluck('Region')
-        ->sort()
-        ->values();
+        $regions = explode(',', auth()->user()->regions ?? '');
+        $regions = Store::whereIn('Region',$regions)->pluck('Region')->unique()->sort();
+
+        // $regions = Store::distinct()
+        // ->pluck('Region')
+        // ->sort()
+        // ->values();
+
         return view('users.create', compact('regions'));
     }
 

@@ -125,7 +125,7 @@ class ReportController extends Controller
                 $message .= "This schedule's has metrics that fall outside of company standards as listed below:\n\n";
                 $message .= implode("\n\n", $metricsOutsideStandards);
 
-                $subject = 'Schedule Approved with alert';
+                $subject = 'Schedule Approved with Alert!';
                 $emails = $report?->store?->AlertEmailAddress ?? "";
                 $emails = explode(',',$emails);
                 foreach($emails as $email){
@@ -229,13 +229,13 @@ class ReportController extends Controller
             ]);
         }
         if ($request->cancel) {
-            $message = "The schedule for Week of " . $schedule->ScheduleDate . " has been revoked";
+            $message = "The schedule for Week of " . $schedule->ScheduleDate . " has been revoked.";
             // $message .= $schedule->Comments ? "\nThe comment reads: " . $schedule->Comments : "";
             $subject = "Schedule Revoked";
             $this->sendEmail($message, $subject, $schedule->store?->EmailAddress);
             return \redirect()->back();
         } elseif ($request->is_revoke) {
-            $message = "The schedule for Week of " . $schedule->ScheduleDate . " has been revoked";
+            $message = "The schedule for Week of " . $schedule->ScheduleDate . " has been revoked.";
             $message .= $comment ? "\nThe comment reads: " . $comment : "";
             $subject = "Schedule Revoked";
             $this->sendEmail($message, $subject, $schedule->store?->EmailAddress);
