@@ -125,7 +125,7 @@ class ReportController extends Controller
                 $message .= "This schedule's has metrics that fall outside of company standards as listed below:\n\n";
                 $message .= implode("\n\n", $metricsOutsideStandards);
 
-                $subject = 'Schedule Approved with Alert!';
+                $subject = 'Schedule Approval Alert!';
                 $emails = $report?->store?->AlertEmailAddress ?? "";
                 $emails = explode(',',$emails);
                 foreach($emails as $email){
