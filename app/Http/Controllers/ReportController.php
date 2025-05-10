@@ -89,7 +89,7 @@ class ReportController extends Controller
         $report =  ScheduleApproval::findOrFail($id);
         $report->update([
             'Approved' => !$report->Approved,
-            'ApprovedBy' => $report->Approved ? '' : auth()->user()->name . ' @ ' . now()->format('Y-m-d H:i:s'),
+            'ApprovedBy' => $report->Approved ? '' : auth()->user()->name . ' @ ' . now()->format('Y-m-d H:i:s') . ' Central',
         ]);
         if (!$report->Approved) {
             session()->flash('comment_modal', true);

@@ -164,7 +164,11 @@
                                 <th>Sched File</th>
                                 <th>To Store</th>
                                 <th>From Store</th>
-                                <th width="28%">Approved By</th>
+                                <th width="28%">
+                                    <span style="font-size: 9px">(*all times are in Central Time)</span>
+                                    <br>
+                                    Approved By
+                                </th>
 
                             </thead>
 
