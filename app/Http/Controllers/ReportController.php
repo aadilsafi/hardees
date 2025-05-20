@@ -122,7 +122,7 @@ class ReportController extends Controller
             if (!empty($metricsOutsideStandards)) {
                 // Create the message with the specific metrics that are outside standards
                 $message = "Schedule for unit {$report->UnitNo} for week of {$report->ScheduleDate} was approved by {$report->ApprovedBy} Central Time.\n\n";
-                $message .= "This schedule's has metrics that fall outside of company standards as listed below:\n\n";
+                $message .= "This schedule has metrics that fall outside of company standards as listed below:\n\n";
                 $message .= implode("\n\n", $metricsOutsideStandards);
 
                 $subject = 'Schedule Approval Alert!';
