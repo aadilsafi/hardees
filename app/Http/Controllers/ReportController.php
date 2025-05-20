@@ -129,7 +129,7 @@ class ReportController extends Controller
                 $emails = $report?->store?->AlertEmailAddress ?? "";
                 $emails = explode(',',$emails);
                 foreach($emails as $email){
-                    $this->sendEmail($message, $subject, $email);
+                    $this->sendEmail($message, $subject, $email,$email);
                 }
             }
         }
@@ -248,15 +248,18 @@ class ReportController extends Controller
 
         return redirect()->back()->with('success', 'Comment added successfully Store will be notified!');
     }
-    public function sendEmail($textMessage, $subject, $email)
+    public function sendEmail($textMessage, $subject, $email,$reply_email = null)
     {
         if (!$email) {
             return;
         }
-        Mail::raw($textMessage, function ($message) use ($email, $subject) {
+        if(!$reply_email){
+            $reply_email = auth()->user()?->email;
+        }
+        Mail::raw($textMessage, function ($message) use ($email, $subject,$reply_email) {
             $message->to($email)
                 ->subject($subject)
-                ->replyTo(auth()->user()?->email);
+                ->replyTo($reply_email);
         });
     }
     public function revokeMail(Request $request)
