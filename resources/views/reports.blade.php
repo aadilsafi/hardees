@@ -186,7 +186,7 @@
                                         <form action="{{ route('report.toggle', $report->ID)}}" method="POST">
                                             @csrf
                                             @method('put')
-                                            <button
+                                            <button onclick="handleToggle(this)"
                                                 class="btn {{$report->Approved ? 'btn-danger'  :'btn-primary'}} btn-sm"
                                                 type="submit">{{$report->Approved ? 'Revoke' :'Approve'}}</button>
                                         </form>
