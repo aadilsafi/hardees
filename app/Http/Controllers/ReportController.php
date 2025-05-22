@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Mime\Part\TextPart;
 
@@ -128,8 +129,19 @@ class ReportController extends Controller
                 $subject = 'Schedule Approval Alert!';
                 $emails = $report?->store?->AlertEmailAddress ?? "";
                 $emails = explode(',',$emails);
+
                 foreach($emails as $email){
                     $this->sendEmail($message, $subject, $email);
+                    // Log the alert email details
+                    Log::info('Schedule Alert Email Sent', [
+                        'store_number' => $report->UnitNo,
+                        'criteria_out_of_bounds' => $metricsOutsideStandards,
+                        'approved_by' => $report->ApprovedBy,
+                        'schedule_date' => $report->ScheduleDate,
+                        'sent_to' => trim($email),
+                        'sent_at' => now()->toDateTimeString(),
+                        'subject' => $subject
+                    ]);
                 }
             }
         }
