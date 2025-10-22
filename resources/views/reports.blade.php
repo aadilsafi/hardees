@@ -156,6 +156,7 @@
                                 <th>vs 6wk Avg</th>
                                 <th>vs 3wk Avg</th>
                                 <th>vs Last Year</th>
+                                <th>Hours Scheduled</th>
                                 <th>Labor Pct</th>
                                 <th>Labor hrs +/-</th>
                                 <th>OT Hrs</th>
@@ -218,6 +219,9 @@
                                     </td>
                                     <td class="align-middle">
                                         {{$report->vsLastYear}}
+                                    </td>
+                                    <td class="align-middle">
+                                        {{ $report->ScheduledHours ?? '-' }}
                                     </td>
                                     <td class="align-middle">
                                         {{$report->LaborPct}}
