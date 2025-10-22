@@ -338,6 +338,7 @@
     commentModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
         var comment = button.getAttribute('data-comment');
+        comment = comment.replace(/''/g, "'");
         var published = button.getAttribute('data-published');
         var id = button.getAttribute('data-id');
         var idInput = commentModal.querySelector('#report-id');
